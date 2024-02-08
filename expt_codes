@@ -1,0 +1,183 @@
+section .data
+ecnt dw 5dh                    
+
+
+section .bss
+dis_buffer resb 2
+
+
+section .text
+       global _start
+  _start:
+mov bx, word[ecnt]
+  mov ecx, 2
+mov edi, dis_buffer
+DUP:   rol bl,04
+        mov al,bl
+      and al, 0fh
+      cmp al, 09h
+    jbe NEXT
+    add al, 07h
+    NEXT:   add al, 30h
+    mov [edi], al
+      inc edi
+      loop DUP
+     
+      ;print number
+mov eax, 4
+mov ebx, 1
+mov ecx, dis_buffer
+mov edx, 2                    ;write 2 digits
+int 80h
+
+;exit program
+mov eax, 1
+mov ebx, 0
+int 80h
+;Programmer title : to convert lowercase character to uppercase using procedures
+
+
+section .data
+msg1 db "Enter a Lowercase Character : "
+msgLen1 equ $-msg1
+msg2 db 10,13,"Coverted Character is  : "
+msgLen2 equ $-msg2
+msg3 db "The entered character is not a lowercase character ! "
+msgLen3 equ $-msg3
+newline db 10
+
+section .bss
+char resb 2
+
+
+section .text
+global _start:
+    _start:
+    mov eax,4
+      mov ebx,1
+      mov ecx,msg1
+      mov edx,msgLen1
+      int 80h
+
+mov eax,3
+      mov ebx,0
+      mov ecx,char
+      mov edx,1
+      int 80h
+     
+     
+      CALL ToUpper
+     
+     
+mov eax,1
+mov ebx,0
+int 80h
+
+
+
+
+
+
+
+
+
+; LowerCase to UpperCase
+ToUpper: mov eax,[char]
+cmp eax,61h
+
+
+
+
+
+jae check
+jmp display
+
+check:  cmp eax,7Ah
+jbe conversion
+jmp display
+
+
+  conversion :  
+ 
+  sub eax,20h
+  mov [char],eax
+ 
+  mov eax,4
+      mov ebx,1
+      mov ecx,msg2
+      mov edx,msgLen2
+      int 80h
+ 
+ 
+ 
+     
+
+
+         
+         
+         
+          ; display uppercase value
+mov ecx,char
+mov eax, 4
+mov ebx, 1
+mov edx, 1  
+int 80h
+
+
+;print newline
+mov eax, 4
+mov ebx, 1
+mov ecx, newline
+mov edx, 1
+int 80h
+
+jmp exit
+
+
+display : mov eax,4
+    mov ebx, 1
+  mov ecx, msg3
+    mov edx, msgLen3  
+           int 80h
+           
+           ;print newline
+mov eax, 4
+mov ebx, 1
+mov ecx, newline
+mov edx, 1
+int 80h
+ 
+ exit:
+
+RET
+         
+          ; display uppercase value
+mov ecx,char
+mov eax, 4
+mov ebx, 1
+mov edx, 1  
+int 80h
+
+
+;print newline
+mov eax, 4
+mov ebx, 1
+mov ecx, newline
+mov edx, 1
+int 80h
+
+jmp exit
+
+
+;display : mov eax,4
+ ;   mov ebx, 1
+;   mov ecx, msg3
+  ;   mov edx, msgLen3  
+      ;     int 80h
+           
+           ;print newline
+mov eax, 4
+mov ebx, 1
+mov ecx, newline
+mov edx, 1
+int 80h
